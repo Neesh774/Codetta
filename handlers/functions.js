@@ -111,7 +111,7 @@ module.exports = {
     }catch (e){
       console.log(String(e.stack).bgRed)
     }
-  }
+  },
 }
 
 /** Template by Tomato#6966 | https://github.com/Tomato6966/Discord-Js-Handler-Template */

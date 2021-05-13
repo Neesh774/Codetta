@@ -31,7 +31,7 @@ module.exports = {
         "language_id": index,
       }
       console.log(body);
-      const options = {
+      const POSToptions = {
         method: 'POST',
         url: 'https://judge0-ce.p.rapidapi.com/submissions',
         qs: {base64_encoded: 'true', fields: '*'},
@@ -44,12 +44,47 @@ module.exports = {
         body: body,
         json: true
       };
-      
-      request(options, function (error, response, body) {
+      var token;
+      request(POSToptions, function (error, response, body) {
         if (error) throw new Error(error);
-      
         console.log(body);
+        token = body['token'];
+        var messageID;
+        message.channel.send(new MessageEmbed()
+          .setColor(ee.color)
+          .setFooter(ee.footertext, ee.footericon)
+          .setTitle(`Success!`)
+          .setDescription(`Your token: \`\`\`${token}\`\`\``)
+          .addField("Requested by ", user, false)
+        ).then(message => {messageID = message.id})
+        const GEToptions = {
+          method: 'GET',
+          url: 'https://judge0-ce.p.rapidapi.com/submissions/' + token,
+          qs: {base64_encoded: 'true', fields: '*'},
+          headers: {
+            'x-rapidapi-key': 'd6f38a8010msh80def6bcd5ffaeap11ccd2jsnb191fc4ab056',
+            'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
+            useQueryString: true
+          }
+        };
+        
+        request(GEToptions, function (error, response, body) {
+          if (error) throw new Error(error);
+        
+          console.log("GOT: "+body);
+          return message.channel.send(new MessageEmbed()
+            .setColor(ee.color)
+            .setFooter(ee.footertext, ee.footericon)
+            .setTitle("Success!")
+            .setDescription(`\`\`\`${code}\`\`\``)
+            .addField("Output", body['output'], false)
+            .addField("Status: ", body['status'])
+            .addField("Time: ", `${body['time']}ms`)
+            .addField("Ran in ", body['language'])
+          )
+        });
       });
+
     } catch (e) {
         console.log(String(e.stack).bgRed)
         return message.channel.send(new MessageEmbed()
