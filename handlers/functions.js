@@ -111,32 +111,6 @@ module.exports = {
     }catch (e){
       console.log(String(e.stack).bgRed)
     }
-  },
-  getCode: function(script, lang){
-    var vers = versions[lang];
-    var stdin = "";
-    var program = {
-      script : script,
-      language: lang,
-      stdin: stdin,
-      versionIndex: vers,
-      clientId: ee.clientID,
-      clientSecret:ee.clientSecret
-  };
-  console.log(`Script: \n${script}`);
-  console.log(`Lang: \n${lang}`);
-  console.log(`STDIN: \n${stdin}`);
-  console.log(`Version: \n${vers}`);
-  request({
-      url: 'https://api.jdoodle.com/v1/execute',
-      method: "POST",
-      json: program
-  },
-  function (error, response, body) {
-      console.log('error:', error);
-      console.log('statusCode:', response && response.statusCode);
-      console.log('body:', body);
-  });
   }
 }
 
