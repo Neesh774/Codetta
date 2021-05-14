@@ -8,16 +8,9 @@ module.exports = {
     cooldown: 2,
     usage: "say <TEXT>",
     description: "Resends your Text",
+    memberpermissions: "MANAGE_MESSAGES",
     run: async (client, message, args, user, text, prefix) => {
     try{
-      if(message.member.hasPermission("ADMINISTRATOR")){
-        return message.channel.send(new MessageEmbed()
-            .setColor(ee.wrongcolor)
-            .setFooter(ee.footertext, ee.footericon)
-            .setTitle(`❌ ERROR | You don't have permission for that.`)
-            .setDescription(`Usage: \`${prefix}${this.usage}\``)
-        );
-      }
       if(!args[0])
         return message.channel.send(new MessageEmbed()
             .setColor(ee.wrongcolor)

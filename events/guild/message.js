@@ -66,8 +66,6 @@ module.exports = async (client, message) => {
         timestamps.set(message.author.id, now); //if he is not on cooldown, set it to the cooldown
         setTimeout(() => timestamps.delete(message.author.id), cooldownAmount); //set a timeout function with the cooldown, so it gets deleted later on again
       try{
-        //try to delete the message of the user who ran the cmd
-        try{  message.delete();   }catch{}
         //if Command has specific permission return error
         if(command.memberpermissions && !message.member.hasPermission(command.memberpermissions, { checkAdmin: command.adminPermOverride, checkOwner: command.adminPermOverride })) {
           return message.channel.send(new Discord.MessageEmbed()
