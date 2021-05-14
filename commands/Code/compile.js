@@ -60,7 +60,7 @@ module.exports = {
         const GEToptions = {
           method: 'GET',
           url: 'https://judge0-ce.p.rapidapi.com/submissions/' + token,
-          qs: {base64_encoded: 'true', fields: '*'},
+          qs: {base64_encoded: 'true'},
           headers: {
             'x-rapidapi-key': 'd6f38a8010msh80def6bcd5ffaeap11ccd2jsnb191fc4ab056',
             'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
