@@ -5,25 +5,36 @@ const indices = require("../../botconfig/languageVersions.json");
 const functions = require("../../handlers/functions");
 const funcs = require("../../handlers/functions");
 const request = require('request');
+const { debug } = require("request");
 module.exports = {
     name: "compile",
     category: "Code",
     aliases: ["code", "run"],
     cooldown: 2,
     usage: "compile",
-    description: "Compiles the given code.",
+    description: "Compiles the given code. Remember, the code you put in must be the entire file, so if there are any main functions required, include those as well.",
     run: async (client, message, args, user, text, prefix) => {
     try{
       var lines = text.split("\n");
       var lang = lines[0].slice(3);
       var code = "";
       var index = indices[lang];
+      var endCodeLine;
+      var input = "";
       for(var i = 1; i < lines.length; i ++){
         if(lines[i] === '```'){
+          console.log("End Code Line = " + i + " Num lines = " + lines.length);
+          endCodeLine = i;
           break;
         }
         code += lines[i];
         code += "\n";
+      }
+      if(!endCodeLine == lines.length-1){
+        console.log("Found input");
+        for(var i = endCodeLine+1; i < lines.length;i ++){
+          input += lines[i];
+        }
       }
       code.trim(); 
       // console.log(`Lang Index: ${index}`);
@@ -31,6 +42,7 @@ module.exports = {
       const body = {
         "source_code": code,
         "language_id": index,
+        "stdin": input
       }
       console.log(body);
       message.channel.send("Thinking...");
@@ -75,6 +87,7 @@ module.exports = {
           if (error) throw new Error(error);
           try{
             body = JSON.parse(body);
+          console.log(body);
           console.log("Output: " + body['stdout']);
           console.log("Time: " + body['time']);
           console.log("Status: " + body['status']['description']);
@@ -98,6 +111,7 @@ module.exports = {
               .setTitle("🟢Accepted")
               .setDescription(`\`\`\`${code}\`\`\``)
               .addField("Error: ", body['stderr'])
+              .addField("Compile output: ", `\`\`\`${body['compile_output']}\`\`\``)
               .addField("Status: ", body['status']['description'])
               .addField("Time: ", `${body['time']}ms`)
               .addField("Ran in ", body['language']['name'])
