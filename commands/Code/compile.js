@@ -18,14 +18,16 @@ module.exports = {
       var lang = lines[0].slice(3);
       var code = "";
       var index = indices[lang];
-      for(var i = 1; i < lines.length - 1; i ++){
+      for(var i = 1; i < lines.length; i ++){
+        if(lines[i] === '```'){
+          break;
+        }
         code += lines[i];
         code += "\n";
       }
       code.trim(); 
       // console.log(`Lang Index: ${index}`);
       // console.log(`Code: \n${code}`);
-      code = code.replace(/\n/gi, '');
       const body = {
         "source_code": code,
         "language_id": index,
@@ -35,7 +37,7 @@ module.exports = {
       const POSToptions = {
         method: 'POST',
         url: 'https://judge0-ce.p.rapidapi.com/submissions',
-        qs: {base64_encoded: 'true', fields: '*'},
+        qs: {base64_encoded: 'false', fields: '*'},
         headers: {
           'content-type': 'application/json',
           'x-rapidapi-key': 'd6f38a8010msh80def6bcd5ffaeap11ccd2jsnb191fc4ab056',
@@ -61,7 +63,7 @@ module.exports = {
         const GEToptions = {
           method: 'GET',
           url: 'https://judge0-ce.p.rapidapi.com/submissions/' + token,
-          qs: {base64_encoded: 'true', fields: '*'},
+          qs: {base64_encoded: 'false', fields: '*'},
           headers: {
             'x-rapidapi-key': 'd6f38a8010msh80def6bcd5ffaeap11ccd2jsnb191fc4ab056',
             'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
@@ -73,21 +75,34 @@ module.exports = {
           if (error) throw new Error(error);
           try{
             body = JSON.parse(body);
-          console.log(body)
           console.log("Output: " + body['stdout']);
           console.log("Time: " + body['time']);
           console.log("Status: " + body['status']['description']);
           console.log("Language: " + body['language']['name']);
-          return message.channel.send(new MessageEmbed()
-            .setColor(ee.color)
-            .setFooter(ee.footertext, ee.footericon)
-            .setTitle("Success!")
-            .setDescription(`\`\`\`${code}\`\`\``)
-            .addField("Output", body['stdout'], false)
-            .addField("Status: ", body['status']['description'])
-            .addField("Time: ", `${body['time']}ms`)
-            .addField("Ran in ", body['language']['name'])
-          )
+          if(body['stdout']){
+            message.channel.send(new MessageEmbed()
+              .setColor(ee.color)
+              .setFooter(ee.footertext, ee.footericon)
+              .setTitle("🟢 Accepted")
+              .setDescription(`\`\`\`${code}\`\`\``)
+              .addField("Output: ", body['stdout'])
+              .addField("Status: ", body['status']['description'])
+              .addField("Time: ", `${body['time']}ms`)
+              .addField("Ran in ", body['language']['name'])
+            )
+          }
+          else{
+            message.channel.send(new MessageEmbed()
+              .setColor(ee.color)
+              .setFooter(ee.footertext, ee.footericon)
+              .setTitle("🟢Accepted")
+              .setDescription(`\`\`\`${code}\`\`\``)
+              .addField("Error: ", body['stderr'])
+              .addField("Status: ", body['status']['description'])
+              .addField("Time: ", `${body['time']}ms`)
+              .addField("Ran in ", body['language']['name'])
+            )
+          }
           }
           catch(e){
             return message.channel.send(new MessageEmbed()
@@ -96,7 +111,7 @@ module.exports = {
               .setTitle(`❌ ERROR | An error occurred`)
               .setDescription(`\`\`\`${e.stack}\`\`\``)
             );
-          }no
+          }
         });
       });
 
