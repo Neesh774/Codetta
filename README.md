@@ -7,6 +7,7 @@ A Discord Bot that allows you to compile code in over 15 different languages(lis
 - ``[c]say [phrase]`` will make the bot say whatever you want it to(Requires administrator permissions).
 - ``[c]ping`` will give you a pong!
 - ``[c]compile ```[language] [code] ``` `` will compile the given code in the given language.
+- -``[c]langs`` will list all available languages for compilation.
 
 Supported languages:
 - Java
@@ -18,7 +19,6 @@ Supported languages:
 - Ruby
 - Go
 - Scala
-- Bash Shell
 - SQL
 - Pascal
 - C#
@@ -28,17 +28,9 @@ Supported languages:
 - Groovy
 - Fortran
 - Lua
-- TCL
 - Rust
-- Ada
-- VERILOG
-- Dart
 - Clojure
 - NodeJS
-- Scheme
-- Prolog
-- CoffeeScript
 - F#
 - Elixir
-- Nim
 - Kotlin
