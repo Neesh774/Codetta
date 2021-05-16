@@ -18,11 +18,11 @@ module.exports = {
       var lines = text.split("\n");
       var lang = lines[0].slice(3);
       var code = "";
-      var index = indices[lang];
+      var index = indices[lang]['id'];
       var endCodeLine;
       var input = "";
       for(var i = 1; i < lines.length; i ++){
-        if(lines[i] === '```'){
+        if(lines[i].startsWith('```')){
           console.log("End Code Line = " + i + " Num lines = " + lines.length);
           endCodeLine = i;
           break;
@@ -30,12 +30,12 @@ module.exports = {
         code += lines[i];
         code += "\n";
       }
-      if(!endCodeLine == lines.length-1){
-        console.log("Found input");
-        for(var i = endCodeLine+1; i < lines.length;i ++){
-          input += lines[i];
-        }
-      }
+      // if(!endCodeLine == lines.length-1){
+      //   console.log("Found input");
+      //   for(var i = endCodeLine+1; i < lines.length;i ++){
+      //     input += lines[i];
+      //   }
+      // }
       code.trim(); 
       // console.log(`Lang Index: ${index}`);
       // console.log(`Code: \n${code}`);
@@ -65,13 +65,6 @@ module.exports = {
         console.log(body);
         token = body['token'];
         var messageID;
-        message.channel.send(new MessageEmbed()
-          .setColor(ee.color)
-          .setFooter(ee.footertext, ee.footericon)
-          .setTitle(`Compiling code...`)
-          .setDescription(`Your token: \`\`\`${token}\`\`\``)
-          .addField("Requested by ", user, false)
-        ).then(message => {messageID = message.id})
         const GEToptions = {
           method: 'GET',
           url: 'https://judge0-ce.p.rapidapi.com/submissions/' + token,
@@ -87,7 +80,7 @@ module.exports = {
           if (error) throw new Error(error);
           try{
             body = JSON.parse(body);
-          console.log(body);
+          // console.log(body);
           console.log("Output: " + body['stdout']);
           console.log("Time: " + body['time']);
           console.log("Status: " + body['status']['description']);
@@ -97,24 +90,38 @@ module.exports = {
               .setColor(ee.color)
               .setFooter(ee.footertext, ee.footericon)
               .setTitle("🟢 Accepted")
+              .setThumbnail(indices[lang]['image'])
               .setDescription(`\`\`\`${code}\`\`\``)
-              .addField("Output: ", body['stdout'])
-              .addField("Status: ", body['status']['description'])
-              .addField("Time: ", `${body['time']}ms`)
-              .addField("Ran in ", body['language']['name'])
+              .addField("Output: ", body['stdout'], true)
+              .addField("Status: ", body['status']['description'], true)
+              .addField('\u200B', '\u200B')
+              .addField("Time: ", `${body['time']}ms`, true)
+              .addField("Ran in ", body['language']['name'], true)
+              .addField("Token: ", token, false)
+              .addField("Requested by ", user, false)
+            )
+          }
+          else if(body['status'] === "Processing"){
+            message.channel.send(new MessageEmbed()
+              .setColor(ee.color)
+              .setFooter(ee.footertext, ee.footericon)
+              .setTitle("🟢 Try that again")
+              .setDescription("Looks like there was an error. Try that command again.")
+              .addField("Requested by ", user, false)
             )
           }
           else{
             message.channel.send(new MessageEmbed()
               .setColor(ee.color)
               .setFooter(ee.footertext, ee.footericon)
-              .setTitle("🟢Accepted")
+              .setTitle("🟢 Accepted")
               .setDescription(`\`\`\`${code}\`\`\``)
               .addField("Error: ", body['stderr'])
               .addField("Compile output: ", `\`\`\`${body['compile_output']}\`\`\``)
               .addField("Status: ", body['status']['description'])
               .addField("Time: ", `${body['time']}ms`)
               .addField("Ran in ", body['language']['name'])
+              .addField("Requested by ", user, false)
             )
           }
           }
@@ -124,6 +131,7 @@ module.exports = {
               .setFooter(ee.footertext, ee.footericon)
               .setTitle(`❌ ERROR | An error occurred`)
               .setDescription(`\`\`\`${e.stack}\`\`\``)
+              .addField("Requested by ", user, false)
             );
           }
         });
@@ -136,6 +144,7 @@ module.exports = {
             .setFooter(ee.footertext, ee.footericon)
             .setTitle(`❌ ERROR | An error occurred`)
             .setDescription(`\`\`\`${e.stack}\`\`\``)
+            .addField("Requested by ", user, false)
         );
     }
   }
