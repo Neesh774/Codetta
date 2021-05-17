@@ -1,13 +1,14 @@
 # Codetta
 A Discord Bot that allows you to compile code in over 15 different languages(listed below).
 ## Commands
+[] = Required, <> = Optional
 - ``[c]help`` lists all available commands.
 - ``[c]uptime`` tells you how long the bot has been online.
 - ``[c]embed [title] ++ [description]`` will create an embed in the channel the message was sent in(Requires administrator permissions).
 - ``[c]say [phrase]`` will make the bot say whatever you want it to(Requires administrator permissions).
 - ``[c]ping`` will give you a pong!
 - ``[c]compile ```[language] [code] ``` `` will compile the given code in the given language.
-- -``[c]langs`` will list all available languages for compilation.
+- -``[c]langs <language>`` will list all available languages for compilation, or give information about the given language.
 
 Supported languages:
 - Java

@@ -30,12 +30,11 @@ module.exports = {
         code += lines[i];
         code += "\n";
       }
-      // if(!endCodeLine == lines.length-1){
-      //   console.log("Found input");
-      //   for(var i = endCodeLine+1; i < lines.length;i ++){
-      //     input += lines[i];
-      //   }
-      // }
+      if(endCodeLine != lines.length-1){
+        for(var i = endCodeLine+1; i < lines.length;i ++){
+          input += lines[i];
+        }
+      }
       code.trim(); 
       // console.log(`Lang Index: ${index}`);
       // console.log(`Code: \n${code}`);
@@ -97,7 +96,8 @@ module.exports = {
               .addField('\u200B', '\u200B')
               .addField("Time: ", `${body['time']}ms`, true)
               .addField("Ran in ", body['language']['name'], true)
-              .addField("Token: ", token, false)
+              .addField("Input: ", body['stdin'], true)
+              .addField("Token: ", `\`${token}\``, false)
               .addField("Requested by ", user, false)
             )
           }

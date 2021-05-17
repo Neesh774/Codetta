@@ -31,7 +31,7 @@
     },
     "python":{
         "id": 71,
-        "name": "Python3",
+        "name": "Python",
         "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1200px-Python-logo-notext.svg.png",
         "engine": "3.8.1"
     },
@@ -128,7 +128,7 @@
     "elixir":{
         "id": 57,
         "name": "Elixir",
-        "image": "https://www.varvet.com/images/elixir-logo.svg",
+        "image": "https://avatars2.githubusercontent.com/u/1481354?v=3&s=400",
         "engine": "1.9.4"
     },
     "kotlin": {
