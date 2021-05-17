@@ -11,7 +11,7 @@ module.exports = {
     category: "Code",
     aliases: ["code", "run"],
     cooldown: 2,
-    usage: "compile",
+    usage: "compile ```<language> <code>``` [input]",
     description: "Compiles the given code. Remember, the code you put in must be the entire file, so if there are any main functions required, include those as well.",
     run: async (client, message, args, user, text, prefix) => {
     try{
